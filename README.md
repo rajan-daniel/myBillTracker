@@ -1,3 +1,6 @@
+## Development Notes
+
+```bash
 `-----------------------------------5/20/2026-----------------------------------------------
 Scaffolded NextJS project
 Create Supabase DB using Auth users and new table called public bills,
@@ -25,3 +28,4 @@ auth linkage
 foreign key
 ownership enforcement
 RLS security
+```
