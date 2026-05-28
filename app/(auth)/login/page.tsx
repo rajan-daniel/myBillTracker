@@ -1,7 +1,10 @@
-"use client"
+"use client";
+
 import { useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function LoginPage() {
+  const supabase = createClient();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -24,12 +27,20 @@ export default function LoginPage() {
     setError("");
 
     try {
-      // fake login
-      await new Promise((r) => setTimeout(r, 1000));
+      const { error } = await supabase.auth.signInWithPassword({
+        email: form.email,
+        password: form.password,
+      });
 
-      console.log("Login:", form);
+      if (error) {
+        setError("Invalid email or password");
+        return;
+      }
+
+      // success → go to dashboard
+      window.location.href = "/dashboard";
     } catch {
-      setError("Invalid email or password");
+      setError("Something went wrong");
     } finally {
       setLoading(false);
     }

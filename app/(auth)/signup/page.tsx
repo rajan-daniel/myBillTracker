@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 export default function SignupPage() {
+  const supabase = createClient();
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -33,10 +35,18 @@ export default function SignupPage() {
     }
 
     try {
-      // fake signup
-      await new Promise((r) => setTimeout(r, 1000));
+      const { error } = await supabase.auth.signUp({
+        email: form.email,
+        password: form.password,
+      });
 
-      console.log("Signup:", form);
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      // optional: redirect after signup
+      window.location.href = "/dashboard";
     } catch {
       setError("Something went wrong. Please try again.");
     } finally {
