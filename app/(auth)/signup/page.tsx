@@ -85,7 +85,7 @@ export default function SignupPage() {
           />
         </div>
 
-        <div>
+        <div className="text-bold">
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
             id="confirmPassword"
