@@ -8,7 +8,7 @@ export default function AddBillForm() {
 
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
-  const [dueDay, setDueDay] = useState('')
+  const [dueDate, setDueDate] = useState('')
   const [frequency, setFrequency] = useState('monthly')
 
   async function handleSubmit(e: React.FormEvent) {
@@ -27,7 +27,7 @@ export default function AddBillForm() {
       user_id: user.id,
       name,
       amount: Number(amount),
-      due_day: Number(dueDay),
+      due_date: dueDate,
       frequency,
     })
 
@@ -40,7 +40,7 @@ export default function AddBillForm() {
     // clear form
     setName('')
     setAmount('')
-    setDueDay('')
+    setDueDate('')
     setFrequency('monthly')
 
     alert('Bill added!')
@@ -68,12 +68,9 @@ export default function AddBillForm() {
 
       <div>
         <input
-          type="number"
-          placeholder="Due day"
-          min="1"
-          max="31"
-          value={dueDay}
-          onChange={(e) => setDueDay(e.target.value)}
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
         />
       </div>
 
@@ -85,6 +82,7 @@ export default function AddBillForm() {
           <option value="monthly">Monthly</option>
           <option value="weekly">Weekly</option>
           <option value="yearly">Yearly</option>
+          <option value="one-time">One Time</option>
         </select>
       </div>
 

@@ -7,7 +7,7 @@ type Bill = {
   id: string;
   name: string;
   amount: number;
-  due_day: number;
+  due_date: string;
   frequency: string;
 };
 
@@ -31,7 +31,10 @@ export default function BillsList() {
   }
 
   async function deleteBill(id: string) {
-    const { error } = await supabase.from("bills").delete().eq("id", id);
+    const { error } = await supabase
+      .from("bills")
+      .delete()
+      .eq("id", id);
 
     if (error) {
       console.error(error);
@@ -53,10 +56,20 @@ export default function BillsList() {
       {bills.map((bill) => (
         <div key={bill.id}>
           <p>{bill.name}</p>
-          <p>${bill.amount}</p>
-          <p>Due: {bill.due_day}</p>
+
+          <p>${bill.amount.toFixed(2)}</p>
+
+          <p>
+            Due:{" "}
+            {new Date(bill.due_date).toLocaleDateString()}
+          </p>
+
           <p>{bill.frequency}</p>
-          <button onClick={() => deleteBill(bill.id)}>Delete</button>
+
+          <button onClick={() => deleteBill(bill.id)}>
+            Delete
+          </button>
+
           <hr />
         </div>
       ))}

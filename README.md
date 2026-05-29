@@ -62,4 +62,13 @@ Session persistence working
 Protected dashboard working
 User identity available (user.id, user.email)
 DB exists with RLS enabled
+
+-----------------------------------5/29/2026-----------------------------------------------
+Core application functionality
+  CREATE Bills to table
+  READ Bills from table using RLS
+  DELETE Bills from table protected route
+
+Update table rules to now allow NULL or EMPTY values for name amount 
+changed bill to be actual date instead of just day of month
 ```
