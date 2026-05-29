@@ -71,4 +71,5 @@ Core application functionality
 
 Update table rules to now allow NULL or EMPTY values for name amount 
 changed bill to be actual date instead of just day of month
+architecture and functionality are nearly complete
 ```
