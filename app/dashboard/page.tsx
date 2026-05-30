@@ -2,6 +2,8 @@ import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import LogoutButton from "@/components/LogoutButton";
+import AddBillForm from "@/components/AddBillForm";
+import BillsList from "@/components/BillsList";
 
 export default async function Dashboard() {
   const cookieStore = await cookies();
@@ -15,7 +17,6 @@ export default async function Dashboard() {
 
   if (error || !user) {
     redirect("/login");
-    return;
   }
 
   return (
@@ -26,6 +27,10 @@ export default async function Dashboard() {
 
       <p>User ID: {user.id}</p>
 
+      <AddBillForm />
+
+      <BillsList />
+      
       <LogoutButton />
     </div>
   );
