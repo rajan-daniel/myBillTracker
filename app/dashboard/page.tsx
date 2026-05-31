@@ -20,11 +20,21 @@ export default async function Dashboard() {
 
   return (
     <div>
-      <h1>Dashboard</h1>
+      <div className="space-y-4 mb-8">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+          Dashboard
+        </h1>
 
-      <p>Welcome, {user.email}</p>
+        <div className="flex justify-center">
+          <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm space-y-1">
+            <p className="text-gray-700">
+              Welcome, <span className="font-semibold">{user.email}</span>
+            </p>
 
-      <p>User ID: {user.id}</p>
+            <p className="text-sm text-gray-500">User ID: {user.id}</p>
+          </div>
+        </div>
+      </div>
 
       <AddBillForm />
 
