@@ -17,12 +17,17 @@ export default function Home() {
         <div className="absolute inset-0 bg-black/40" />
 
         <div className="relative z-10 flex h-full items-center justify-center px-4">
-          <h1 className="text-4xl md:text-7xl font-bold text-white flex flex-col md:flex-row items-center md:items-baseline gap-2 md:gap-4 text-center">
-            <span>Welcome to</span>
-            <span className="bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-500 bg-clip-text text-transparent">
-              My Bill Tracker
-            </span>
-          </h1>
+          <div className="flex flex-col items-center text-center gap-2">
+            <h1 className="text-4xl md:text-7xl font-bold">
+              <span className="bg-gradient-to-r from-emerald-300 via-green-400 to-lime-500 bg-clip-text text-transparent">
+                My Bill Tracker
+              </span>
+            </h1>
+
+            <p className="text-white text-lg md:text-2xl font-medium">
+              everything you need, nothing you don't!
+            </p>
+          </div>
         </div>
       </section>
     </>

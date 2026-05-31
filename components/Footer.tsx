@@ -4,7 +4,6 @@ export default function Footer() {
   return (
     <footer className="w-full border-t bg-[var(--text-color)] py-14 text-sm text-white">
       <div className="mx-auto flex flex-col md:flex-row w-full max-w-6xl px-8 items-start gap-16">
-        
         {/* email section */}
         <div className="flex flex-col gap-4 w-full max-w-sm">
           <img
@@ -24,17 +23,18 @@ export default function Footer() {
 
         {/* both navs and about repeat */}
         <div className="flex flex-col md:flex-row gap-12 md:gap-16 w-full justify-between">
-          
           <nav className="flex flex-col gap-4 items-start text-[var(--footer-accent)] font-bold">
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/terms">Terms of Service</Link>
           </nav>
 
-          
           <div className="flex flex-col gap-2 max-w-xs">
             <h1 className="font-bold">About</h1>
             <p className="leading-relaxed text-[var(--footer-accent)]">
-              CHANGE HERE
+              My Bill Tracker is a thoughtfully designed bill management tool
+              built to keep the user experience clean and focused. While the
+              interface stays minimal, the system is structured to be reliable
+              and scalable.
             </p>
           </div>
         </div>
