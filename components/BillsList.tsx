@@ -63,7 +63,7 @@ return (
       bills.map((bill) => (
         <div
           key={bill.id}
-          className="border rounded-xl p-4 bg-gray-50 flex flex-col gap-1"
+          className="border rounded-xl p-4 bg-white flex flex-col gap-1"
         >
           <div className="flex justify-between items-center">
             <p className="font-semibold text-gray-800">

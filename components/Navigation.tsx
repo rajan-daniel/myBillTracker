@@ -46,36 +46,40 @@ export default function Navigation() {
   return (
     <>
       <nav className="flex items-center justify-center gap-12 h-22 font-bold text-[1rem] bg-[var(--accent-silver)] text-[var(--text-color)] relative">
-
         {/* desktop */}
         <div className="absolute left-8 hidden md:flex items-center gap-2">
-          <img
-            className="h-8 w-8 object-contain"
-            src="/logo.svg"
-            alt="Logo"
-          />
-          <span className="text-xl">myBillTracker</span>
+          <Link
+            href="/"
+            className="absolute left-8 hidden md:flex items-center gap-2"
+          >
+            <img
+              className="h-8 w-8 object-contain"
+              src="/logo.svg"
+              alt="Logo"
+            />
+            <span className="text-xl">myBillTracker</span>
+          </Link>
         </div>
 
         {/* mobile logo */}
         <div className="absolute left-1/2 -translate-x-1/2 flex md:hidden items-center gap-2">
-          <img
-            className="h-8 w-8 object-contain"
-            src="/logo.svg"
-            alt="Logo"
-          />
+          <Link href="/" className="flex items-center gap-2">
+            <img
+              className="h-8 w-8 object-contain"
+              src="/logo.svg"
+              alt="Logo"
+            />
+          </Link>
         </div>
 
         {/* desktop nav */}
-        <div className="hidden md:flex gap-12">
+        <div className="absolute right-8 hidden md:flex items-center gap-8">
           {!user ? (
             <Link href="/login">Sign In</Link>
           ) : (
             <>
-              <Link href="/reset-password">
-                Reset Password
-              </Link>
-
+              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/reset-password">Reset Password</Link>
               <LogoutButton />
             </>
           )}
@@ -103,10 +107,10 @@ export default function Navigation() {
             </Link>
           ) : (
             <>
-              <Link
-                href="/reset-password"
-                onClick={() => setOpen(false)}
-              >
+              <Link href="/dashboard" onClick={() => setOpen(false)}>
+                Dashboard
+              </Link>
+              <Link href="/reset-password" onClick={() => setOpen(false)}>
                 Reset Password
               </Link>
 

@@ -1,7 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import LogoutButton from "@/components/LogoutButton";
 import AddBillForm from "@/components/AddBillForm";
 import BillsList from "@/components/BillsList";
 
