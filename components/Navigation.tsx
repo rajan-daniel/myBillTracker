@@ -1,12 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState, useEffect } from "react";
+import { createClient } from "@/utils/supabase/client";
+import LogoutButton from "./LogoutButton";
 
-export default function Navigation(){
-  const pathname = usePathname();
+export default function Navigation() {
   const [open, setOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  const supabase = createClient();
 
   useEffect(() => {
     if (open) {
@@ -20,53 +23,98 @@ export default function Navigation(){
     };
   }, [open]);
 
+  useEffect(() => {
+    const getUser = async () => {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      setUser(user);
+    };
+
+    getUser();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [supabase]);
+
   return (
     <>
       <nav className="flex items-center justify-center gap-12 h-22 font-bold text-[1rem] bg-[var(--accent-silver)] text-[var(--text-color)] relative">
 
-        {/*desktop*/}
+        {/* desktop */}
         <div className="absolute left-8 hidden md:flex items-center gap-2">
-          <img className="h-8 w-8 object-contain" src="/logo.svg" alt="Logo" />
-          <span className="text-xl">CHANGE THIS</span>
+          <img
+            className="h-8 w-8 object-contain"
+            src="/logo.svg"
+            alt="Logo"
+          />
+          <span className="text-xl">myBillTracker</span>
         </div>
 
-        {/*md: mobile*/}
+        {/* mobile logo */}
         <div className="absolute left-1/2 -translate-x-1/2 flex md:hidden items-center gap-2">
-          <img className="h-8 w-8 object-contain" src="/logo.svg" alt="Logo" />
+          <img
+            className="h-8 w-8 object-contain"
+            src="/logo.svg"
+            alt="Logo"
+          />
         </div>
 
-        {/*desktop nav*/}
+        {/* desktop nav */}
         <div className="hidden md:flex gap-12">
-          <Link href="/">Home</Link>
-          <Link href="/products">Products</Link>
-          <Link href="/about">About</Link>
+          {!user ? (
+            <Link href="/login">Sign In</Link>
+          ) : (
+            <>
+              <Link href="/reset-password">
+                Reset Password
+              </Link>
+
+              <LogoutButton />
+            </>
+          )}
         </div>
 
-        {/*mobile btn*/}
+        {/* mobile menu button */}
         <button
           onClick={() => setOpen(!open)}
           className="absolute left-8 md:hidden text-3xl"
         >
-          <img className="h-8 w-8 object-contain invert" src="/menu.svg" alt="Logo" />
+          <img
+            className="h-8 w-8 object-convert invert"
+            src="/menu.svg"
+            alt="Menu"
+          />
         </button>
       </nav>
 
-      {/*mobile menu, nav with column*/}
+      {/* mobile menu */}
       {open && (
         <div className="md:hidden fixed top-22 left-0 w-full bg-[var(--accent-silver)] text-[var(--text-color)] flex flex-col items-center gap-6 py-6 font-bold text-lg z-50 shadow-lg">
-          <Link href="/" onClick={() => setOpen(false)}>
-            Home
-          </Link>
+          {!user ? (
+            <Link href="/login" onClick={() => setOpen(false)}>
+              Sign In
+            </Link>
+          ) : (
+            <>
+              <Link
+                href="/reset-password"
+                onClick={() => setOpen(false)}
+              >
+                Reset Password
+              </Link>
 
-          <Link href="/products" onClick={() => setOpen(false)}>
-            Products
-          </Link>
-
-          <Link href="/about" onClick={() => setOpen(false)}>
-            About
-          </Link>
+              <LogoutButton />
+            </>
+          )}
         </div>
       )}
     </>
   );
-};
+}

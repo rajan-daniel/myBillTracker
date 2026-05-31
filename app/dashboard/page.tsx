@@ -30,8 +30,6 @@ export default async function Dashboard() {
       <AddBillForm />
 
       <BillsList />
-      
-      <LogoutButton />
     </div>
   );
 }
