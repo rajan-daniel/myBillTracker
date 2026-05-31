@@ -1,8 +1,12 @@
-/*@import "tailwindcss";
+@import "tailwindcss";
 
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #ffffff;
+  --accent-silver: #F2F2F2;
+  --text-color: #1A1A1A;
+  --accent-text: #E73545;
+  --footer-accent: #BBBBBB;
 }
 
 @theme inline {
@@ -14,14 +18,16 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #ffffff;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
 }
-*/
+
+body html {
+  overflow-x: hidden;
+}
