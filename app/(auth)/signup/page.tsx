@@ -27,7 +27,6 @@ export default function SignupPage() {
     setLoading(true);
     setError("");
 
-    // Validate that passwords match before sending to server
     if (form.password !== form.confirmPassword) {
       setError("Passwords do not match");
       setLoading(false);
@@ -45,7 +44,6 @@ export default function SignupPage() {
         return;
       }
 
-      // optional: redirect after signup
       window.location.href = "/dashboard";
     } catch {
       setError("Something went wrong. Please try again.");
@@ -55,12 +53,20 @@ export default function SignupPage() {
   }
 
   return (
-    <main className="signup-page">
-      <form onSubmit={handleSubmit} className="signup-form">
-        <h1>Create Account</h1>
+    <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-5"
+      >
+        <h1 className="text-2xl font-bold text-center text-gray-800">
+          Create Account
+        </h1>
 
-        <div>
-          <label htmlFor="email">Email</label>
+        {/* Email */}
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-600">
+            Email
+          </label>
           <input
             id="email"
             name="email"
@@ -69,11 +75,15 @@ export default function SignupPage() {
             required
             value={form.email}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
           />
         </div>
 
-        <div>
-          <label htmlFor="password">Password</label>
+        {/* Password */}
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-600">
+            Password
+          </label>
           <input
             id="password"
             name="password"
@@ -82,11 +92,15 @@ export default function SignupPage() {
             required
             value={form.password}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
           />
         </div>
 
-        <div className="text-bold">
-          <label htmlFor="confirmPassword">Confirm Password</label>
+        {/* Confirm Password */}
+        <div className="space-y-1">
+          <label className="text-sm font-medium text-gray-600">
+            Confirm Password
+          </label>
           <input
             id="confirmPassword"
             name="confirmPassword"
@@ -95,17 +109,31 @@ export default function SignupPage() {
             required
             value={form.confirmPassword}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
           />
         </div>
 
-        {error && <p role="alert">{error}</p>}
+        {/* Error */}
+        {error && (
+          <p className="text-sm text-red-500 bg-red-50 p-2 rounded">
+            {error}
+          </p>
+        )}
 
-        <button type="submit" disabled={loading}>
+        {/* Submit */}
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-black text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {loading ? "Creating account..." : "Sign Up"}
         </button>
 
-        <div className="links">
-          <a href="/login">Already have an account? Sign In</a>
+        {/* Link */}
+        <div className="text-sm text-center text-gray-600 pt-2">
+          <a href="/login" className="hover:underline">
+            Already have an account? Sign In
+          </a>
         </div>
       </form>
     </main>

@@ -49,30 +49,49 @@ export default function BillsList() {
     fetchBills();
   }, []);
 
-  return (
-    <div>
-      <h2>Your Bills</h2>
+return (
+  <div className="space-y-4">
+    <h2 className="text-lg font-bold text-gray-800">
+      Your Bills
+    </h2>
 
-      {bills.map((bill) => (
-        <div key={bill.id}>
-          <p>{bill.name}</p>
+    {bills.length === 0 ? (
+      <p className="text-gray-500 text-sm">
+        No bills yet
+      </p>
+    ) : (
+      bills.map((bill) => (
+        <div
+          key={bill.id}
+          className="border rounded-xl p-4 bg-gray-50 flex flex-col gap-1"
+        >
+          <div className="flex justify-between items-center">
+            <p className="font-semibold text-gray-800">
+              {bill.name}
+            </p>
 
-          <p>${bill.amount.toFixed(2)}</p>
+            <button
+              onClick={() => deleteBill(bill.id)}
+              className="text-red-500 text-sm hover:underline"
+            >
+              Delete
+            </button>
+          </div>
 
-          <p>
-            Due:{" "}
-            {new Date(bill.due_date).toLocaleDateString()}
+          <p className="text-gray-700">
+            ${bill.amount.toFixed(2)}
           </p>
 
-          <p>{bill.frequency}</p>
+          <p className="text-sm text-gray-500">
+            Due: {new Date(bill.due_date).toLocaleDateString()}
+          </p>
 
-          <button onClick={() => deleteBill(bill.id)}>
-            Delete
-          </button>
-
-          <hr />
+          <p className="text-xs text-gray-400 uppercase tracking-wide">
+            {bill.frequency}
+          </p>
         </div>
-      ))}
-    </div>
-  );
+      ))
+    )}
+  </div>
+);
 }

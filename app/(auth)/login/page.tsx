@@ -37,7 +37,6 @@ export default function LoginPage() {
         return;
       }
 
-      // success → go to dashboard
       window.location.href = "/dashboard";
     } catch {
       setError("Something went wrong");
@@ -47,12 +46,19 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="login-page">
-      <form onSubmit={handleSubmit} className="login-form">
-        <h1>Sign In</h1>
+    <main className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <form
+        onSubmit={handleSubmit}
+        className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-6"
+      >
+        <h1 className="text-2xl font-bold text-center text-gray-800">
+          Sign In
+        </h1>
 
-        <div>
-          <label htmlFor="email">Email</label>
+        <div className="space-y-1">
+          <label htmlFor="email" className="text-sm font-medium text-gray-600">
+            Email
+          </label>
           <input
             id="email"
             name="email"
@@ -61,11 +67,17 @@ export default function LoginPage() {
             required
             value={form.email}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
           />
         </div>
 
-        <div>
-          <label htmlFor="password">Password</label>
+        <div className="space-y-1">
+          <label
+            htmlFor="password"
+            className="text-sm font-medium text-gray-600"
+          >
+            Password
+          </label>
           <input
             id="password"
             name="password"
@@ -74,18 +86,31 @@ export default function LoginPage() {
             required
             value={form.password}
             onChange={handleChange}
+            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black/20 focus:border-black transition"
           />
         </div>
 
-        {error && <p role="alert">{error}</p>}
+        {error && (
+          <p className="text-sm text-red-500 bg-red-50 p-2 rounded">
+            {error}
+          </p>
+        )}
 
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-black text-white py-2 rounded-lg font-medium hover:bg-gray-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {loading ? "Signing in..." : "Sign In"}
         </button>
 
-        <div className="links">
-          <a href="/forgot-password">Forgot password?</a>
-          <a href="/signup">Create account</a>
+        <div className="flex justify-between text-sm text-gray-600 pt-2">
+          <a href="/forgot-password" className="hover:underline">
+            Forgot password?
+          </a>
+          <a href="/signup" className="hover:underline">
+            Create account
+          </a>
         </div>
       </form>
     </main>
