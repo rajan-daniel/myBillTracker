@@ -82,4 +82,5 @@ cleaned up dashboard spacing between add bill form and bills list so it doesnt f
 improved overall styling consistency (background contrast, card styling, spacing)
 built out full page UI responsive navbar + hero image + footer and made navbar reactive for navigation across pages
 kept full supabase auth + CRUD working (create, read, delete with user based RLS)
+Legal Pages including Privacy Policy & Terms of Service
 ```
