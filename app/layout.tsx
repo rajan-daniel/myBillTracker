@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
-import Footer from "@/components/Footer"
+import Footer from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +21,9 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html
       lang="en"
@@ -31,9 +31,9 @@ export default function RootLayout({
     >
       <body className="min-h-screen flex flex-col bg-[var(--text-color)] text-white">
         <Navigation />
-        {children}
+        <main className="flex-1">{children}</main>
         <Footer />
-        </body>
+      </body>
     </html>
   );
 }

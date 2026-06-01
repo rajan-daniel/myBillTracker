@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { createClient } from "@/utils/supabase/client";
 import LogoutButton from "./LogoutButton";
 
@@ -10,6 +11,12 @@ export default function Navigation() {
   const [user, setUser] = useState<any>(null);
 
   const supabase = createClient();
+  const pathname = usePathname();
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setOpen(false);
+  }, [pathname]);
 
   useEffect(() => {
     if (open) {
@@ -41,17 +48,14 @@ export default function Navigation() {
     });
 
     return () => subscription.unsubscribe();
-  }, [supabase]);
+  }, []);
 
   return (
     <>
       <nav className="flex items-center justify-center gap-12 h-22 font-bold text-[1rem] bg-[var(--accent-silver)] text-[var(--text-color)] relative">
         {/* desktop */}
         <div className="absolute left-8 hidden md:flex items-center gap-2">
-          <Link
-            href="/"
-            className="absolute left-8 hidden md:flex items-center gap-2"
-          >
+          <Link href="/" className="flex items-center gap-2">
             <img
               className="h-8 w-8 object-contain"
               src="/logo.svg"
@@ -102,18 +106,11 @@ export default function Navigation() {
       {open && (
         <div className="md:hidden fixed top-22 left-0 w-full bg-[var(--accent-silver)] text-[var(--text-color)] flex flex-col items-center gap-6 py-6 font-bold text-lg z-50 shadow-lg">
           {!user ? (
-            <Link href="/login" onClick={() => setOpen(false)}>
-              Sign In
-            </Link>
+            <Link href="/login">Sign In</Link>
           ) : (
             <>
-              <Link href="/dashboard" onClick={() => setOpen(false)}>
-                Dashboard
-              </Link>
-              <Link href="/reset-password" onClick={() => setOpen(false)}>
-                Reset Password
-              </Link>
-
+              <Link href="/dashboard">Dashboard</Link>
+              <Link href="/reset-password">Reset Password</Link>
               <LogoutButton />
             </>
           )}
