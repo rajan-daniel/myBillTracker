@@ -19,8 +19,8 @@ export default async function Dashboard() {
   }
 
   return (
-    <div>
-      <div className="space-y-4 mb-8">
+    <div className="max-w-5xl mx-auto px-4 space-y-10">
+      <div className="space-y-4 mb-8 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
           Dashboard
         </h1>
@@ -36,7 +36,13 @@ export default async function Dashboard() {
         </div>
       </div>
 
-      <AddBillForm />
+      <div className="flex justify-center">
+        <AddBillForm />
+      </div>
+
+      <div className="text-center py-4">
+        <h2 className="text-xl font-bold text-gray-800">Bills</h2>
+      </div>
 
       <BillsList />
     </div>

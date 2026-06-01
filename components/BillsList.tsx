@@ -50,47 +50,45 @@ export default function BillsList() {
   }, []);
 
 return (
-  <div className="space-y-4">
-    <h2 className="text-lg font-bold text-gray-800">
-      Your Bills
-    </h2>
-
+  <div className="space-y-4 pb-6">
     {bills.length === 0 ? (
       <p className="text-gray-500 text-sm">
         No bills yet
       </p>
     ) : (
-      bills.map((bill) => (
-        <div
-          key={bill.id}
-          className="border rounded-xl p-4 bg-white flex flex-col gap-1"
-        >
-          <div className="flex justify-between items-center">
-            <p className="font-semibold text-gray-800">
-              {bill.name}
+      <div className="space-y-3">
+        {bills.map((bill) => (
+          <div
+            key={bill.id}
+            className="w-full max-w-md mx-auto border rounded-xl p-4 bg-white flex flex-col gap-1"
+          >
+            <div className="flex justify-between items-center">
+              <p className="font-semibold text-gray-800">
+                {bill.name}
+              </p>
+
+              <button
+                onClick={() => deleteBill(bill.id)}
+                className="text-red-500 text-sm hover:underline"
+              >
+                Delete
+              </button>
+            </div>
+
+            <p className="text-gray-700">
+              ${bill.amount.toFixed(2)}
             </p>
 
-            <button
-              onClick={() => deleteBill(bill.id)}
-              className="text-red-500 text-sm hover:underline"
-            >
-              Delete
-            </button>
+            <p className="text-sm text-gray-500">
+              Due: {new Date(bill.due_date).toLocaleDateString()}
+            </p>
+
+            <p className="text-xs text-gray-400 uppercase tracking-wide">
+              {bill.frequency}
+            </p>
           </div>
-
-          <p className="text-gray-700">
-            ${bill.amount.toFixed(2)}
-          </p>
-
-          <p className="text-sm text-gray-500">
-            Due: {new Date(bill.due_date).toLocaleDateString()}
-          </p>
-
-          <p className="text-xs text-gray-400 uppercase tracking-wide">
-            {bill.frequency}
-          </p>
-        </div>
-      ))
+        ))}
+      </div>
     )}
   </div>
 );
