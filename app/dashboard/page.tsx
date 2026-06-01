@@ -41,10 +41,7 @@ export default async function Dashboard() {
         <AddBillForm />
       </div>
 
-      <div className="text-center py-4">
-        <h2 className="text-xl font-bold text-gray-800">Bills</h2>
-      </div>
-
+      
       <BillsList />
     </div>
   );

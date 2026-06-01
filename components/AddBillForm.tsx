@@ -13,23 +13,55 @@ export default function AddBillForm() {
   const [dueDate, setDueDate] = useState("");
   const [frequency, setFrequency] = useState("monthly");
 
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const steps = ["Name", "Amount", "Due Date", "Frequency"];
 
+  function validateStep() {
+    if (step === 0 && !name.trim()) {
+      setError("Please enter a bill name");
+      return false;
+    }
+
+    if (step === 1 && !amount) {
+      setError("Please enter an amount");
+      return false;
+    }
+
+    if (step === 2 && !dueDate) {
+      setError("Please select a due date");
+      return false;
+    }
+
+    setError("");
+    return true;
+  }
+
   function nextStep() {
+    if (!validateStep()) return;
     setStep((s) => s + 1);
   }
 
   function prevStep() {
-    setStep((s) => s - 1);
+    setError("");
+    setStep((s) => Math.max(s - 1, 0));
   }
 
   async function handleSubmit() {
+    if (!name.trim()) return setError("Name is required");
+    if (!amount) return setError("Amount is required");
+    if (!dueDate) return setError("Due date is required");
+
+    setError("");
+    setSuccess("");
+
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
-      alert("You must be logged in");
+      setError("You must be logged in");
       return;
     }
 
@@ -42,7 +74,7 @@ export default function AddBillForm() {
     });
 
     if (error) {
-      alert(error.message);
+      setError(error.message);
       return;
     }
 
@@ -53,7 +85,7 @@ export default function AddBillForm() {
     setFrequency("monthly");
     setStep(0);
 
-    alert("Bill added!");
+    setSuccess("Bill tracked!");
   }
 
   return (
@@ -73,12 +105,27 @@ export default function AddBillForm() {
           <div className="h-1 bg-gray-200 rounded mt-3 overflow-hidden">
             <div
               className="h-full bg-black transition-all"
-              style={{ width: `${((step + 1) / steps.length) * 100}%` }}
+              style={{
+                width: `${((step + 1) / steps.length) * 100}%`,
+              }}
             />
           </div>
         </div>
 
-        {/* STEP 1 - Name */}
+        {/* ERROR / SUCCESS MESSAGES */}
+        {error && (
+          <p className="text-sm text-red-500 text-center">
+            {error}
+          </p>
+        )}
+
+        {success && (
+          <p className="text-sm text-green-600 text-center">
+            {success}
+          </p>
+        )}
+
+        {/* STEP 1 */}
         {step === 0 && (
           <div className="space-y-3">
             <label className="text-sm font-medium text-gray-600">
@@ -93,7 +140,7 @@ export default function AddBillForm() {
           </div>
         )}
 
-        {/* STEP 2 - Amount */}
+        {/* STEP 2 */}
         {step === 1 && (
           <div className="space-y-3">
             <label className="text-sm font-medium text-gray-600">
@@ -109,7 +156,7 @@ export default function AddBillForm() {
           </div>
         )}
 
-        {/* STEP 3 - Date */}
+        {/* STEP 3 */}
         {step === 2 && (
           <div className="space-y-3">
             <label className="text-sm font-medium text-gray-600">
@@ -124,7 +171,7 @@ export default function AddBillForm() {
           </div>
         )}
 
-        {/* STEP 4 - Frequency */}
+        {/* STEP 4 */}
         {step === 3 && (
           <div className="space-y-3">
             <label className="text-sm font-medium text-gray-600">
@@ -149,7 +196,7 @@ export default function AddBillForm() {
           <button
             onClick={prevStep}
             disabled={step === 0}
-            className="text-black px-4 py-2 text-sm rounded-lg border disabled:opacity-40"
+            className="px-4 py-2 text-sm rounded-lg border text-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
           >
             Back
           </button>
