@@ -57,8 +57,8 @@ export default function AddBillForm() {
   }
 
   return (
-    <main className="flex items-center justify-center bg-gray-100 px-4 py-10">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 space-y-6">
+    <main className="bg-gray-50 px-4 py-10">
+      <div className="w-[448px] bg-white rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
 
         {/* Header */}
         <div className="text-center">
@@ -149,7 +149,7 @@ export default function AddBillForm() {
           <button
             onClick={prevStep}
             disabled={step === 0}
-            className="px-4 py-2 text-sm rounded-lg border disabled:opacity-40"
+            className="text-black px-4 py-2 text-sm rounded-lg border disabled:opacity-40"
           >
             Back
           </button>

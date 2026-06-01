@@ -55,7 +55,7 @@ export default function BillsList() {
           {bills.map((bill) => (
             <div
               key={bill.id}
-              className="w-full max-w-md mx-auto border rounded-xl p-4 bg-white flex flex-col gap-1"
+              className="w-full max-w-md mx-auto border rounded-xl p-4 bg-white flex flex-col gap-1 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg hover:border-gray-300"
             >
               <div className="flex justify-between items-center">
                 <p className="text-2xl font-semibold text-gray-900 tracking-tight">
