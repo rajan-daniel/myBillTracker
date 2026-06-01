@@ -1,8 +1,6 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import AddBillForm from "@/components/AddBillForm";
-import BillsList from "@/components/BillsList";
 import DashboardClient from "@/components/DashboardClient";
 
 export default async function Dashboard() {
