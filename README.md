@@ -72,4 +72,15 @@ Core application functionality
 Update table rules to now allow NULL or EMPTY values for name amount 
 changed bill to be actual date instead of just day of month
 architecture and functionality are nearly complete
+
+-----------------------------------5/31/2026-----------------------------------------------
+refactored add bill form into a proper step based flow instead of everything on one screen
+fixed weird form resizing issue caused by flex + max width layout
+removed alerts and replaced them with in app error + success messages
+added basic step validation so users cant move forward without filling required fields
+cleaned up dashboard spacing between add bill form and bills list so it doesnt feel so disconnected
+improved overall styling consistency (background contrast, card styling, spacing)
+built out full page UI responsive navbar + hero image + footer and made navbar reactive for navigation across pages
+kept full supabase auth + CRUD working (create, read, delete with user based RLS)
+Legal Pages including Privacy Policy & Terms of Service
 ```

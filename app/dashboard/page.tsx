@@ -1,9 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import LogoutButton from "@/components/LogoutButton";
-import AddBillForm from "@/components/AddBillForm";
-import BillsList from "@/components/BillsList";
+import DashboardClient from "@/components/DashboardClient";
 
 export default async function Dashboard() {
   const cookieStore = await cookies();
@@ -20,18 +18,25 @@ export default async function Dashboard() {
   }
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-
-      <p>Welcome, {user.email}</p>
-
-      <p>User ID: {user.id}</p>
-
-      <AddBillForm />
-
-      <BillsList />
+    <div className="max-w-5xl bg-gray-50 mx-auto px-4 pt-10 space-y-10 rounded-xl">
       
-      <LogoutButton />
+      <div className="space-y-4 pt-6 mb-8 text-center">
+        <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
+          Dashboard
+        </h1>
+
+        <div className="flex justify-center pt-2">
+          <div className="bg-white border border-gray-200 rounded-xl p-4 shadow-sm space-y-1">
+            <p className="text-gray-700">
+              Welcome, <span className="font-semibold">{user.email}</span>
+            </p>
+
+            <p className="text-sm text-gray-500">User ID: {user.id}</p>
+          </div>
+        </div>
+      </div>
+
+      <DashboardClient />
     </div>
   );
 }

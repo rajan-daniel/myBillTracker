@@ -11,7 +11,7 @@ type Bill = {
   frequency: string;
 };
 
-export default function BillsList() {
+export default function BillsList({ refreshKey }) {
   const supabase = createClient();
 
   const [bills, setBills] = useState<Bill[]>([]);
@@ -31,10 +31,7 @@ export default function BillsList() {
   }
 
   async function deleteBill(id: string) {
-    const { error } = await supabase
-      .from("bills")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("bills").delete().eq("id", id);
 
     if (error) {
       console.error(error);
@@ -47,32 +44,45 @@ export default function BillsList() {
 
   useEffect(() => {
     fetchBills();
-  }, []);
+  }, [refreshKey]);
 
   return (
-    <div>
-      <h2>Your Bills</h2>
+    <div className="space-y-4 pb-6">
+      {bills.length === 0 ? (
+        <p className="text-gray-500 text-sm">No bills yet</p>
+      ) : (
+        <div className="space-y-3">
+          {bills.map((bill) => (
+            <div
+              key={bill.id}
+              className="w-full max-w-md mx-auto border rounded-xl p-4 bg-white flex flex-col gap-1 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg hover:border-gray-300"
+            >
+              <div className="flex justify-between items-center">
+                <p className="text-2xl font-semibold text-gray-900 tracking-tight">
+                  {bill.name}
+                </p>
 
-      {bills.map((bill) => (
-        <div key={bill.id}>
-          <p>{bill.name}</p>
+                <button
+                  onClick={() => deleteBill(bill.id)}
+                  className="text-red-500 text-sm hover:underline"
+                >
+                  Delete
+                </button>
+              </div>
 
-          <p>${bill.amount.toFixed(2)}</p>
+              <p className="text-gray-700">${bill.amount.toFixed(2)}</p>
 
-          <p>
-            Due:{" "}
-            {new Date(bill.due_date).toLocaleDateString()}
-          </p>
+              <p className="text-sm text-gray-500">
+                Due: {new Date(bill.due_date).toLocaleDateString()}
+              </p>
 
-          <p>{bill.frequency}</p>
-
-          <button onClick={() => deleteBill(bill.id)}>
-            Delete
-          </button>
-
-          <hr />
+              <p className="text-xs text-gray-400 uppercase tracking-wide">
+                {bill.frequency}
+              </p>
+            </div>
+          ))}
         </div>
-      ))}
+      )}
     </div>
   );
 }
