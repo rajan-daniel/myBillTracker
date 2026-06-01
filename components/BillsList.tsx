@@ -31,10 +31,7 @@ export default function BillsList() {
   }
 
   async function deleteBill(id: string) {
-    const { error } = await supabase
-      .from("bills")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("bills").delete().eq("id", id);
 
     if (error) {
       console.error(error);
@@ -49,47 +46,43 @@ export default function BillsList() {
     fetchBills();
   }, []);
 
-return (
-  <div className="space-y-4 pb-6">
-    {bills.length === 0 ? (
-      <p className="text-gray-500 text-sm">
-        No bills yet
-      </p>
-    ) : (
-      <div className="space-y-3">
-        {bills.map((bill) => (
-          <div
-            key={bill.id}
-            className="w-full max-w-md mx-auto border rounded-xl p-4 bg-white flex flex-col gap-1"
-          >
-            <div className="flex justify-between items-center">
-              <p className="font-semibold text-gray-800">
-                {bill.name}
+  return (
+    <div className="space-y-4 pb-6">
+      {bills.length === 0 ? (
+        <p className="text-gray-500 text-sm">No bills yet</p>
+      ) : (
+        <div className="space-y-3">
+          {bills.map((bill) => (
+            <div
+              key={bill.id}
+              className="w-full max-w-md mx-auto border rounded-xl p-4 bg-white flex flex-col gap-1"
+            >
+              <div className="flex justify-between items-center">
+                <p className="text-2xl font-semibold text-gray-900 tracking-tight">
+                  {bill.name}
+                </p>
+
+                <button
+                  onClick={() => deleteBill(bill.id)}
+                  className="text-red-500 text-sm hover:underline"
+                >
+                  Delete
+                </button>
+              </div>
+
+              <p className="text-gray-700">${bill.amount.toFixed(2)}</p>
+
+              <p className="text-sm text-gray-500">
+                Due: {new Date(bill.due_date).toLocaleDateString()}
               </p>
 
-              <button
-                onClick={() => deleteBill(bill.id)}
-                className="text-red-500 text-sm hover:underline"
-              >
-                Delete
-              </button>
+              <p className="text-xs text-gray-400 uppercase tracking-wide">
+                {bill.frequency}
+              </p>
             </div>
-
-            <p className="text-gray-700">
-              ${bill.amount.toFixed(2)}
-            </p>
-
-            <p className="text-sm text-gray-500">
-              Due: {new Date(bill.due_date).toLocaleDateString()}
-            </p>
-
-            <p className="text-xs text-gray-400 uppercase tracking-wide">
-              {bill.frequency}
-            </p>
-          </div>
-        ))}
-      </div>
-    )}
-  </div>
-);
+          ))}
+        </div>
+      )}
+    </div>
+  );
 }
