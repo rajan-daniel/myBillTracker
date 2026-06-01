@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 
-export default function AddBillForm() {
+export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
   const supabase = createClient();
 
   const [step, setStep] = useState(0);
@@ -48,6 +48,18 @@ export default function AddBillForm() {
     setStep((s) => Math.max(s - 1, 0));
   }
 
+  function handleKeyDown(e: React.KeyboardEvent) {
+    if (e.key !== "Enter") return;
+
+    e.preventDefault();
+
+    if (step < steps.length - 1) {
+      nextStep();
+    } else {
+      handleSubmit();
+    }
+  }
+
   async function handleSubmit() {
     if (!name.trim()) return setError("Name is required");
     if (!amount) return setError("Amount is required");
@@ -78,7 +90,6 @@ export default function AddBillForm() {
       return;
     }
 
-    // reset
     setName("");
     setAmount("");
     setDueDate("");
@@ -86,17 +97,18 @@ export default function AddBillForm() {
     setStep(0);
 
     setSuccess("Bill tracked!");
+    setTimeout(() => {
+      setSuccess("");
+    }, 3000);
+    onSuccess?.();
   }
 
   return (
     <main className="bg-gray-50 px-4 py-10">
       <div className="w-[448px] bg-white rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
-
         {/* Header */}
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-800">
-            Add New Bill
-          </h1>
+          <h1 className="text-2xl font-bold text-gray-800">Add New Bill</h1>
 
           <p className="text-sm text-gray-500 mt-1">
             Step {step + 1} of {steps.length}
@@ -112,17 +124,11 @@ export default function AddBillForm() {
           </div>
         </div>
 
-        {/* ERROR / SUCCESS MESSAGES */}
-        {error && (
-          <p className="text-sm text-red-500 text-center">
-            {error}
-          </p>
-        )}
+        {/* ERROR / SUCCESS */}
+        {error && <p className="text-sm text-red-500 text-center">{error}</p>}
 
         {success && (
-          <p className="text-sm text-green-600 text-center">
-            {success}
-          </p>
+          <p className="text-sm text-green-600 text-center">{success}</p>
         )}
 
         {/* STEP 1 */}
@@ -136,6 +142,7 @@ export default function AddBillForm() {
               placeholder="e.g. Rent, Netflix"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
         )}
@@ -143,15 +150,14 @@ export default function AddBillForm() {
         {/* STEP 2 */}
         {step === 1 && (
           <div className="space-y-3">
-            <label className="text-sm font-medium text-gray-600">
-              Amount
-            </label>
+            <label className="text-sm font-medium text-gray-600">Amount</label>
             <input
               type="number"
               className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/20"
               placeholder="e.g. 50"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
         )}
@@ -167,6 +173,7 @@ export default function AddBillForm() {
               className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/20"
               value={dueDate}
               onChange={(e) => setDueDate(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
           </div>
         )}
@@ -182,6 +189,7 @@ export default function AddBillForm() {
               className="w-full px-4 py-2 border rounded-lg text-gray-900 focus:outline-none focus:ring-2 focus:ring-black/20"
               value={frequency}
               onChange={(e) => setFrequency(e.target.value)}
+              onKeyDown={handleKeyDown}
             >
               <option value="monthly">Monthly</option>
               <option value="weekly">Weekly</option>

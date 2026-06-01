@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import AddBillForm from "@/components/AddBillForm";
 import BillsList from "@/components/BillsList";
+import DashboardClient from "@/components/DashboardClient";
 
 export default async function Dashboard() {
   const cookieStore = await cookies();
@@ -37,12 +38,7 @@ export default async function Dashboard() {
         </div>
       </div>
 
-      <div className="flex justify-center">
-        <AddBillForm />
-      </div>
-
-      
-      <BillsList />
+      <DashboardClient />
     </div>
   );
 }

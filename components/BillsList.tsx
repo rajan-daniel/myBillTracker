@@ -11,7 +11,7 @@ type Bill = {
   frequency: string;
 };
 
-export default function BillsList() {
+export default function BillsList({ refreshKey }) {
   const supabase = createClient();
 
   const [bills, setBills] = useState<Bill[]>([]);
@@ -44,7 +44,7 @@ export default function BillsList() {
 
   useEffect(() => {
     fetchBills();
-  }, []);
+  }, [refreshKey]);
 
   return (
     <div className="space-y-4 pb-6">
