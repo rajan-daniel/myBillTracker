@@ -42,7 +42,7 @@ export default function Footer() {
 
       <div className="mx-auto w-full max-w-6xl px-8">
         <p className="mt-10 text-xs text-white/50">
-          © Released under the MIT License.
+          © {new Date().getFullYear()} Rajan Daniel
         </p>
       </div>
     </footer>
