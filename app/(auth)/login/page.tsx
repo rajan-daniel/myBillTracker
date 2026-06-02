@@ -107,7 +107,7 @@ export default function LoginPage() {
 
         {/* sign in card assist */}
         <div className="flex flex-col items-center gap-2 text-sm text-center text-gray-600 pt-2">
-          <a href="/reset-password" className="hover:underline">
+          <a href="/forgot-password" className="hover:underline">
             Forgot password?
           </a>
           <a href="/signup" className="hover:underline">
