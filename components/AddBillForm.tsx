@@ -105,7 +105,7 @@ export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
 
   return (
     <main className="bg-gray-50 px-4 py-10">
-      <div className="w-[448px] bg-white rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
+      <div className="w-full max-w-[448px] bg-white rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
         {/* Header */}
         <div className="text-center">
           <h1 className="text-2xl font-bold text-gray-800">Add New Bill</h1>
