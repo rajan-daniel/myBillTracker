@@ -55,7 +55,7 @@ export default function LoginPage() {
           Sign In
         </h1>
 
-        {/* Email */}
+        {/* email */}
         <div className="space-y-1">
           <label className="text-sm font-medium text-gray-600">
             Email
@@ -72,7 +72,7 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Password */}
+        {/* password */}
         <div className="space-y-1">
           <label className="text-sm font-medium text-gray-600">
             Password
@@ -89,14 +89,14 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* Error */}
+        {/* error */}
         {error && (
           <p className="text-sm text-red-500 bg-red-50 p-2 rounded">
             {error}
           </p>
         )}
 
-        {/* Submit */}
+        {/* submit */}
         <button
           type="submit"
           disabled={loading}
@@ -105,8 +105,11 @@ export default function LoginPage() {
           {loading ? "Signing in..." : "Sign In"}
         </button>
 
-        {/* Link (MATCHES SIGNUP STYLE) */}
-        <div className="text-sm text-center text-gray-600 pt-2">
+        {/* sign in card assist */}
+        <div className="flex flex-col items-center gap-2 text-sm text-center text-gray-600 pt-2">
+          <a href="/reset-password" className="hover:underline">
+            Forgot password?
+          </a>
           <a href="/signup" className="hover:underline">
             Don't have an account? Create Account
           </a>
