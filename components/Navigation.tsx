@@ -79,11 +79,10 @@ export default function Navigation() {
         {/* desktop nav */}
         <div className="absolute right-8 hidden md:flex items-center gap-8">
           {!user ? (
-            <Link href="/login">Sign In</Link>
+            <Link href="/login" className="hover:underline cursor-pointer">Sign In</Link>
           ) : (
             <>
-              <Link href="/dashboard">Dashboard</Link>
-              <Link href="/reset-password">Reset Password</Link>
+              <Link href="/dashboard" className="hover:underline cursor-pointer">Dashboard</Link>
               <LogoutButton />
             </>
           )}
@@ -110,7 +109,6 @@ export default function Navigation() {
           ) : (
             <>
               <Link href="/dashboard">Dashboard</Link>
-              <Link href="/reset-password">Reset Password</Link>
               <LogoutButton />
             </>
           )}
