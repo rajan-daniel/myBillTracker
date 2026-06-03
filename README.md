@@ -86,4 +86,6 @@ Legal Pages including Privacy Policy & Terms of Service
 
 -----------------------------------6/2/2026-----------------------------------------------
 App router for reset and update password via supabase client
+Refactors and basic de bloating
+First complete version of myBillTracker
 ```
