@@ -23,7 +23,7 @@ export default function BillsList({ refreshKey }) {
     const { data, error } = await supabase
       .from("bills")
       .select("*")
-      .order("created_at", { ascending: false });
+      .order("due_date", { ascending: true });
 
     if (error) {
       console.error(error);
