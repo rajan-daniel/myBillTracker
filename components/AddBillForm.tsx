@@ -83,6 +83,7 @@ export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
       amount: Number(amount),
       due_date: dueDate,
       frequency,
+      status: "unpaid",
     });
 
     if (error) {

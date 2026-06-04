@@ -7,6 +7,7 @@
   --text-color: #1A1A1A;
   --accent-text: #E73545;
   --footer-accent: #BBBBBB;
+  --accent-logo: #38f801;
 }
 
 @theme inline {
