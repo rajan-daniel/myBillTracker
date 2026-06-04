@@ -18,7 +18,7 @@ export default async function Dashboard() {
   }
 
   return (
-    <div className="max-w-5xl bg-gray-50 mx-auto px-4 pt-10 space-y-10 rounded-xl">
+    <div className="max-w-8xl bg-gray-50 mx-auto px-4 pt-10 space-y-10 rounded-xl">
       
       <div className="space-y-4 pt-6 mb-8 text-center">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
