@@ -88,4 +88,10 @@ Legal Pages including Privacy Policy & Terms of Service
 App router for reset and update password via supabase client
 Refactors and basic de bloating
 First complete version of myBillTracker
+
+-----------------------------------6/4/2026-----------------------------------------------
+Polish and add edge features, edit, mark as paid, overdue and ascending sort logic
+Complete styling and test for edge cases,
+App becomes usuable and functional, start to stage CI/CD roadmaps for near future before
+deployment.
 ```
