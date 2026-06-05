@@ -52,7 +52,6 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const [editingBill, setEditingBill] = useState<Bill | null>(null);
   const [showPaid, setShowPaid] = useState(false);
 
-  /* ADDED */
   const [focusMode, setFocusMode] = useState(false);
 
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
@@ -190,16 +189,19 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
         <div className="flex justify-center gap-3">
           <button
             onClick={() => setShowPaid(!showPaid)}
-            className="px-4 py-2 text-sm rounded-lg bg-black text-white hover:bg-gray-800 transition shadow-sm"
+            className="w-[170px] px-4 py-2 text-sm rounded-lg bg-black text-white hover:bg-gray-800 transition shadow-sm"
           >
             {showPaid ? "Hide Paid Bills" : "Show Paid Bills"}
           </button>
 
-          {/* ADDED */}
           <button
             onClick={() => setFocusMode((prev) => !prev)}
-            className={`px-4 py-2 text-sm rounded-lg transition shadow-sm
-              ${focusMode ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-800"}
+            className={`w-[140px] px-4 py-2 text-sm rounded-lg transition shadow-sm
+              ${
+                focusMode
+                  ? "bg-indigo-600 text-white"
+                  : "bg-gray-200 text-gray-800"
+              }
               hover:opacity-80
             `}
           >
