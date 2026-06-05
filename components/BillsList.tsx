@@ -67,6 +67,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const [editingBill, setEditingBill] = useState<Bill | null>(null);
   const [showPaid, setShowPaid] = useState(false);
 
+  /* ✅ ADDED */
+  const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
+
   const filteredBills = showPaid
     ? bills
     : bills.filter((bill) => bill.status !== "paid");
@@ -102,42 +105,56 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   }, [refreshKey]);
 
   async function toggleStatus(bill: Bill) {
-    const playSound = () => {
-      const audio = new Audio("/sounds/paid.mp3");
-      audio.play();
-    };
+    /* ✅ ADDED GUARD */
+    if (loadingIds.has(bill.id)) return;
 
-    const newStatus = bill.status === "paid" ? "unpaid" : "paid";
+    setLoadingIds((prev) => new Set(prev).add(bill.id));
 
-    const { error } = await supabase
-      .from("bills")
-      .update({ status: newStatus })
-      .eq("id", bill.id);
+    try {
+      const playSound = () => {
+        const audio = new Audio("/sounds/paid.mp3");
+        audio.play();
+      };
 
-    if (error) {
-      alert(error.message);
-      return;
-    }
+      const newStatus = bill.status === "paid" ? "unpaid" : "paid";
 
-    if (
-      bill.status === "unpaid" &&
-      newStatus === "paid" &&
-      bill.frequency !== "one-time"
-    ) {
-      playSound();
-      const nextDueDate = getNextDueDate(bill.due_date, bill.frequency);
+      const { error } = await supabase
+        .from("bills")
+        .update({ status: newStatus })
+        .eq("id", bill.id);
 
-      await supabase.from("bills").insert({
-        user_id: bill.user_id,
-        name: bill.name,
-        amount: bill.amount,
-        due_date: nextDueDate,
-        frequency: bill.frequency,
-        status: "unpaid",
+      if (error) {
+        alert(error.message);
+        return;
+      }
+
+      if (
+        bill.status === "unpaid" &&
+        newStatus === "paid" &&
+        bill.frequency !== "one-time"
+      ) {
+        playSound();
+
+        const nextDueDate = getNextDueDate(bill.due_date, bill.frequency);
+
+        await supabase.from("bills").insert({
+          user_id: bill.user_id,
+          name: bill.name,
+          amount: bill.amount,
+          due_date: nextDueDate,
+          frequency: bill.frequency,
+          status: "unpaid",
+        });
+      }
+
+      fetchBills();
+    } finally {
+      setLoadingIds((prev) => {
+        const copy = new Set(prev);
+        copy.delete(bill.id);
+        return copy;
       });
     }
-
-    fetchBills();
   }
 
   function isOverdue(bill: Bill) {
@@ -155,7 +172,6 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
     return `${month}/${day}/${year}`;
   }
 
-  /* ADDED */
   const thisMonthUnpaidTotal = filteredBills
     .filter((bill) => {
       const date = new Date(bill.due_date);
@@ -195,7 +211,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
           </button>
         </div>
 
-        {/* ADDED SUMMARY CARD */}
+        {/* SUMMARY */}
         <div className="flex justify-center">
           <div className="bg-white border rounded-xl px-4 py-3 shadow-sm text-center">
             <p className="text-sm text-gray-500">This Month Unpaid Total</p>
@@ -227,18 +243,22 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
                   </p>
 
                   {isOverdue(bill) && (
-                    <p className="text-xs text-red-500 font-medium">Overdue</p>
+                    <p className="text-xs text-red-500 font-medium">
+                      Overdue
+                    </p>
                   )}
 
                   <div className="flex gap-3">
                     <button
                       onClick={() => toggleStatus(bill)}
+                      disabled={loadingIds.has(bill.id)} /* ✅ ADDED */
                       className="text-sm px-3 py-1 rounded-md text-white
   bg-gradient-to-r from-sky-400 to-indigo-500
   hover:from-sky-300 hover:to-purple-500
   transition-all duration-300
   shadow-md hover:shadow-[0_0_15px_rgba(99,102,241,0.6)]
-  hover:scale-105"
+  hover:scale-105
+  disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {bill.status === "paid" ? "Paid" : "Mark as Paid"}
                     </button>
