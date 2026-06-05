@@ -97,4 +97,7 @@ deployment.
 Auto recurring billing on payment
 Style: Added two column dashboard while maintaining mobile scaling
 Added border for clarity
+Resolved edge cases, overflow element causing right side bands on mount, styling decisions, 
+additional application features not core like focus mode and styling to present them cleanly.
+Resolved found bugs through testing like mark as paid spam causing duplicate cards.
 ```
