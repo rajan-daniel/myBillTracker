@@ -71,8 +71,8 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
 
   const filteredBills = showPaid
-    ? bills
-    : bills.filter((bill) => bill.status !== "paid");
+  ? bills.filter((bill) => bill.status === "paid")
+  : bills.filter((bill) => bill.status !== "paid");
 
   async function fetchBills() {
     const { data, error } = await supabase
