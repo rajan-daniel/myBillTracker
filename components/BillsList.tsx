@@ -11,15 +11,12 @@ function getNextDueDate(dueDate: string, frequency: string): string {
     case "weekly":
       date.setDate(date.getDate() + 7);
       break;
-
     case "monthly":
       date.setMonth(date.getMonth() + 1);
       break;
-
     case "yearly":
       date.setFullYear(date.getFullYear() + 1);
       break;
-
     default:
       return dueDate;
   }
@@ -27,7 +24,6 @@ function getNextDueDate(dueDate: string, frequency: string): string {
   return date.toISOString().split("T")[0];
 }
 
-/* ADDED */
 function isNextMonth(dueDate: string) {
   const date = new Date(dueDate);
   const now = new Date();
@@ -36,17 +32,6 @@ function isNextMonth(dueDate: string) {
     date.getFullYear() > now.getFullYear() ||
     (date.getFullYear() === now.getFullYear() &&
       date.getMonth() > now.getMonth())
-  );
-}
-
-/* ADDED */
-function isThisMonth(dueDate: string) {
-  const date = new Date(dueDate);
-  const now = new Date();
-
-  return (
-    date.getFullYear() === now.getFullYear() &&
-    date.getMonth() === now.getMonth()
   );
 }
 
@@ -67,12 +52,14 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const [editingBill, setEditingBill] = useState<Bill | null>(null);
   const [showPaid, setShowPaid] = useState(false);
 
-  /* ✅ ADDED */
+  /* ADDED */
+  const [focusMode, setFocusMode] = useState(false);
+
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
 
   const filteredBills = showPaid
-  ? bills.filter((bill) => bill.status === "paid")
-  : bills.filter((bill) => bill.status !== "paid");
+    ? bills.filter((bill) => bill.status === "paid")
+    : bills.filter((bill) => bill.status !== "paid");
 
   async function fetchBills() {
     const { data, error } = await supabase
@@ -105,7 +92,6 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   }, [refreshKey]);
 
   async function toggleStatus(bill: Bill) {
-    /* ✅ ADDED GUARD */
     if (loadingIds.has(bill.id)) return;
 
     setLoadingIds((prev) => new Set(prev).add(bill.id));
@@ -177,13 +163,12 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       const date = new Date(bill.due_date);
       const now = new Date();
 
-      const isThisMonth =
-        date.getFullYear() === now.getFullYear() &&
-        date.getMonth() === now.getMonth();
-
-      const isOverdue = date < now;
-
-      return bill.status !== "paid" && (isThisMonth || isOverdue);
+      return (
+        bill.status !== "paid" &&
+        (date.getFullYear() === now.getFullYear() &&
+          date.getMonth() === now.getMonth() ||
+          date < now)
+      );
     })
     .reduce((sum, bill) => sum + bill.amount, 0);
 
@@ -201,13 +186,24 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       )}
 
       <div className="space-y-4 pb-6">
-        {/* TOGGLE */}
-        <div className="flex justify-center">
+        {/* TOGGLES */}
+        <div className="flex justify-center gap-3">
           <button
             onClick={() => setShowPaid(!showPaid)}
             className="px-4 py-2 text-sm rounded-lg bg-black text-white hover:bg-gray-800 transition shadow-sm"
           >
             {showPaid ? "Hide Paid Bills" : "Show Paid Bills"}
+          </button>
+
+          {/* ADDED */}
+          <button
+            onClick={() => setFocusMode((prev) => !prev)}
+            className={`px-4 py-2 text-sm rounded-lg transition shadow-sm
+              ${focusMode ? "bg-indigo-600 text-white" : "bg-gray-200 text-gray-800"}
+              hover:opacity-80
+            `}
+          >
+            {focusMode ? "Focus On" : "Toggle Focus"}
           </button>
         </div>
 
@@ -231,7 +227,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
                 className={`border rounded-xl p-4 flex flex-col gap-1 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg w-full max-w-2xl mx-auto
                   ${getBorderClass(bill)}
                   ${
-                    isNextMonth(bill.due_date)
+                    focusMode && isNextMonth(bill.due_date)
                       ? "bg-gray-50 opacity-60 grayscale"
                       : "bg-white"
                   }
@@ -251,14 +247,14 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
                   <div className="flex gap-3">
                     <button
                       onClick={() => toggleStatus(bill)}
-                      disabled={loadingIds.has(bill.id)} /* ✅ ADDED */
+                      disabled={loadingIds.has(bill.id)}
                       className="text-sm px-3 py-1 rounded-md text-white
-  bg-gradient-to-r from-sky-400 to-indigo-500
-  hover:from-sky-300 hover:to-purple-500
-  transition-all duration-300
-  shadow-md hover:shadow-[0_0_15px_rgba(99,102,241,0.6)]
-  hover:scale-105
-  disabled:opacity-50 disabled:cursor-not-allowed"
+                      bg-gradient-to-r from-sky-400 to-indigo-500
+                      hover:from-sky-300 hover:to-purple-500
+                      transition-all duration-300
+                      shadow-md hover:shadow-[0_0_15px_rgba(99,102,241,0.6)]
+                      hover:scale-105
+                      disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {bill.status === "paid" ? "Paid" : "Mark as Paid"}
                     </button>
