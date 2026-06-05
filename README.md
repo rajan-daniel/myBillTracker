@@ -94,4 +94,7 @@ Polish and add edge features, edit, mark as paid, overdue and ascending sort log
 Complete styling and test for edge cases,
 App becomes usuable and functional, start to stage CI/CD roadmaps for near future before
 deployment.
+Auto recurring billing on payment
+Style: Added two column dashboard while maintaining mobile scaling
+Added border for clarity
 ```
