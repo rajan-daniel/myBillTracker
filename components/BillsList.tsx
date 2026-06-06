@@ -37,7 +37,7 @@ function isNextMonth(dueDate: string) {
 }
 
 function truncateName(name: string) {
-  return name.length > 9 ? name.slice(0, 9) + "..." : name;
+  return name.length > 8 ? name.slice(0, 8) + "..." : name;
 }
 
 function truncateAmount(amount: number) {
@@ -72,7 +72,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const pageSize = 10;
 // ------------------------------------------ //
 
-// -------------- computed values -------------- //
+// ============= computed values ============= //
   const unpaidBills = bills.filter((bill) => bill.status !== "paid");
 
   const filteredBills = showPaid
@@ -98,9 +98,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       );
     })
     .reduce((sum, bill) => sum + bill.amount, 0);
-// ------------------------------------------ //
+// ======================================= //
 
-// -------------- useEffect hooks -------------- // 
+// ================= useEffect hooks ======================
   useEffect(() => {
     const saved = localStorage.getItem("focusMode");
     if (saved !== null) {
@@ -121,9 +121,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   useEffect(() => {
     setPage(1);
   }, [showPaid]);
-// ------------------------------------------ //
+// ======================================= //
 
-// ------------------- data functions ---------------- //
+// ===================== data layer from Supabase ======================///
   async function fetchBills() {
     const { data, error } = await supabase
       .from("bills")
@@ -176,7 +176,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       if (
         bill.status === "unpaid" &&
         newStatus === "paid" &&
-        (bill.frequency === "one-time" || bill.frequency !== "one-time")
+        bill.frequency !== "one-time"
       ) {
         playSound();
 
@@ -201,9 +201,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       });
     }
   }
-// ------------------------------------------ //
+// ===========================================///
 
-// -------------- more helper functions -------------- //
+// ======================== more helper functions ===================///
   function isOverdue(bill: Bill) {
     return bill.status !== "paid" && new Date(bill.due_date) < new Date();
   }
@@ -218,9 +218,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
     const [year, month, day] = date.split("-");
     return `${month}/${day}/${year}`;
   }
-// ---------------------------- //
+// =========================================== //
  
-// -------------- component’s render output -------------- //
+// ========================= component’s render output ===================== //
   return (
     <>
       {editingBill && (
@@ -341,7 +341,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
             transition-all duration-300
             shadow-md hover:shadow-[0_0_15px_rgba(99,102,241,0.6)]
             hover:scale-105
-            disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled:opacity-50 disabled:cursor-not-allowed  whitespace-nowrap"
                       >
                         {bill.status === "paid" ? "Paid" : "Mark as Paid"}
                       </button>
@@ -419,5 +419,5 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
     </>
   );
 }
-// ---------------------------- //
-// ---------------------------- //
+// =========================================== //
+// ======================================= //
