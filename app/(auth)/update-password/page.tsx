@@ -17,14 +17,14 @@ export default function UpdatePasswordPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  function handleChange(e) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setForm({
       ...form,
       [e.target.name]: e.target.value,
     });
   }
 
-  async function handleSubmit(e) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     setError("");
