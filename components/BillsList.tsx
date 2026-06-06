@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import EditBillForm from "@/components/EditBillForm";
 
+// -------------- utility functions -------------- //
 function getNextDueDate(dueDate: string, frequency: string): string {
   const date = new Date(dueDate);
 
@@ -54,34 +55,24 @@ type Bill = {
   frequency: string;
   status: "paid" | "unpaid";
 };
+// ------------------------------------------ //
 
+// -------------- component -------------- //
 export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const supabase = createClient();
 
+// -------------- states -------------- //
   const [bills, setBills] = useState<Bill[]>([]);
   const [editingBill, setEditingBill] = useState<Bill | null>(null);
   const [showPaid, setShowPaid] = useState(false);
-
-  const [focusMode, setFocusMode] = useState(() => {
-    if (typeof window === "undefined") return true;
-
-    const saved = localStorage.getItem("focusMode");
-    return saved ? JSON.parse(saved) : true;
-  });
-
-  useEffect(() => {
-    localStorage.setItem("focusMode", JSON.stringify(focusMode));
-  }, [focusMode]);
-
+  const [focusMode, setFocusMode] = useState(true);
+  const [mounted, setMounted] = useState(false);
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
-
   const [page, setPage] = useState(1);
   const pageSize = 10;
+// ------------------------------------------ //
 
-  useEffect(() => {
-    setPage(1);
-  }, [showPaid]);
-
+// -------------- computed values -------------- //
   const unpaidBills = bills.filter((bill) => bill.status !== "paid");
 
   const filteredBills = showPaid
@@ -94,6 +85,45 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
         .slice(0, 15)
     : unpaidBills.slice((page - 1) * pageSize, page * pageSize);
 
+  const thisMonthUnpaidTotal = filteredBills
+    .filter((bill) => {
+      const date = new Date(bill.due_date);
+      const now = new Date();
+
+      return (
+        bill.status !== "paid" &&
+        ((date.getFullYear() === now.getFullYear() &&
+          date.getMonth() === now.getMonth()) ||
+          date < now)
+      );
+    })
+    .reduce((sum, bill) => sum + bill.amount, 0);
+// ------------------------------------------ //
+
+// -------------- useEffect hooks -------------- // 
+  useEffect(() => {
+    const saved = localStorage.getItem("focusMode");
+    if (saved !== null) {
+      setFocusMode(JSON.parse(saved));
+    }
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    localStorage.setItem("focusMode", JSON.stringify(focusMode));
+  }, [focusMode, mounted]);
+
+  useEffect(() => {
+    fetchBills();
+  }, [refreshKey]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [showPaid]);
+// ------------------------------------------ //
+
+// ------------------- data layer from Supabase ---------------- //
   async function fetchBills() {
     const { data, error } = await supabase
       .from("bills")
@@ -119,10 +149,6 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
 
     fetchBills();
   }
-
-  useEffect(() => {
-    fetchBills();
-  }, [refreshKey]);
 
   async function toggleStatus(bill: Bill) {
     if (loadingIds.has(bill.id)) return;
@@ -175,7 +201,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       });
     }
   }
+// ------------------------------------------ //
 
+// -------------- more helper functions -------------- //
   function isOverdue(bill: Bill) {
     return bill.status !== "paid" && new Date(bill.due_date) < new Date();
   }
@@ -190,21 +218,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
     const [year, month, day] = date.split("-");
     return `${month}/${day}/${year}`;
   }
-
-  const thisMonthUnpaidTotal = filteredBills
-    .filter((bill) => {
-      const date = new Date(bill.due_date);
-      const now = new Date();
-
-      return (
-        bill.status !== "paid" &&
-        ((date.getFullYear() === now.getFullYear() &&
-          date.getMonth() === now.getMonth()) ||
-          date < now)
-      );
-    })
-    .reduce((sum, bill) => sum + bill.amount, 0);
-
+// ---------------------------- //
+ 
+// -------------- component’s render output -------------- //
   return (
     <>
       {editingBill && (
@@ -403,3 +419,5 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
     </>
   );
 }
+// ---------------------------- //
+// ---------------------------- //
