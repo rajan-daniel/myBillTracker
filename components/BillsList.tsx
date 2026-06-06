@@ -315,12 +315,6 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
                       {truncateName(bill.name)}
                     </p>
 
-                    {isOverdue(bill) && (
-                      <p className="text-xs text-red-500 font-medium">
-                        Overdue
-                      </p>
-                    )}
-
                     <div className="flex gap-3">
                       <button
                         onClick={() => toggleStatus(bill)}
@@ -353,11 +347,18 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
                   </div>
 
                   <p className="text-gray-700">${bill.amount.toFixed(2)}</p>
-
-                  <p className="text-sm text-gray-500">
-                    Due: {formatDate(bill.due_date)}
-                  </p>
-
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-gray-500">
+                      Due: {formatDate(bill.due_date)}
+                    </p>
+                    <span>
+                      {isOverdue(bill) && (
+                        <p className="text-xs text-red-500 font-medium">
+                          Overdue
+                        </p>
+                      )}
+                    </span>
+                  </div>
                   <p className="text-xs text-gray-400 uppercase tracking-wide">
                     {bill.frequency}
                   </p>
