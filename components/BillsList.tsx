@@ -75,6 +75,15 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
 
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
 
+  const [page, setPage] = useState(1);
+  const pageSize = 10;
+
+  useEffect(() => {
+    setPage(1);
+  }, [showPaid]);
+
+  const unpaidBills = bills.filter((bill) => bill.status !== "paid");
+
   const filteredBills = showPaid
     ? bills
         .filter((bill) => bill.status === "paid")
@@ -83,7 +92,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
             new Date(b.due_date).getTime() - new Date(a.due_date).getTime(),
         )
         .slice(0, 15)
-    : bills.filter((bill) => bill.status !== "paid");
+    : unpaidBills.slice((page - 1) * pageSize, page * pageSize);
 
   async function fetchBills() {
     const { data, error } = await supabase
@@ -355,6 +364,38 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
                 </div>
               ),
             )}
+          </div>
+        )}
+
+        {!showPaid && filteredBills.length > 0 && (
+          <div className="flex justify-center gap-4 mt-4">
+            <button
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              disabled={page === 1}
+              className={`text-sm px-3 py-1 rounded-md transition-all duration-300 shadow-md hover:scale-105 disabled:cursor-not-allowed ${
+                page === 1
+                  ? "bg-gray-300 text-gray-500 shadow-none"
+                  : "text-white bg-gradient-to-r from-sky-400 to-indigo-500 hover:from-sky-300 hover:to-purple-500 hover:shadow-[0_0_15px_rgba(99,102,241,0.6)]"
+              }`}
+            >
+              Prev
+            </button>
+
+            <span className="text-sm text-gray-600">Page {page}</span>
+
+            <button
+              onClick={() =>
+                setPage((p) => (unpaidBills.length > p * pageSize ? p + 1 : p))
+              }
+              disabled={unpaidBills.length <= page * pageSize}
+              className={`text-sm px-3 py-1 rounded-md transition-all duration-300 shadow-md hover:scale-105 disabled:cursor-not-allowed ${
+                unpaidBills.length <= page * pageSize
+                  ? "bg-gray-300 text-gray-500 shadow-none"
+                  : "text-white bg-gradient-to-r from-sky-400 to-indigo-500 hover:from-sky-300 hover:to-purple-500 hover:shadow-[0_0_15px_rgba(99,102,241,0.6)]"
+              }`}
+            >
+              Next
+            </button>
           </div>
         )}
       </div>
