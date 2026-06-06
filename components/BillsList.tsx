@@ -37,7 +37,7 @@ function isNextMonth(dueDate: string) {
 }
 
 function truncateName(name: string) {
-  return name.length > 8 ? name.slice(0, 8) + "..." : name;
+  return name.length > 9 ? name.slice(0, 9) + "..." : name;
 }
 
 function truncateAmount(amount: number) {
