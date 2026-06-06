@@ -37,7 +37,7 @@ function isNextMonth(dueDate: string) {
 }
 
 function truncateName(name: string) {
-  return name.length > 8 ? name.slice(0, 8) + "..." : name;
+  return name.length > 9 ? name.slice(0, 9) + "..." : name;
 }
 
 function truncateAmount(amount: number) {
@@ -123,7 +123,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   }, [showPaid]);
 // ------------------------------------------ //
 
-// ------------------- data layer from Supabase ---------------- //
+// ------------------- data functions ---------------- //
   async function fetchBills() {
     const { data, error } = await supabase
       .from("bills")
@@ -176,7 +176,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       if (
         bill.status === "unpaid" &&
         newStatus === "paid" &&
-        bill.frequency !== "one-time"
+        (bill.frequency === "one-time" || bill.frequency !== "one-time")
       ) {
         playSound();
 

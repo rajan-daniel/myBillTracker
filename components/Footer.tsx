@@ -11,7 +11,7 @@ export default function Footer() {
             src="/logo.svg"
             alt="Logo"
           />
-          {/*
+          {/* email box if needed
           <h1 className="text-2xl font-bold text-white">Temp</h1>
 
           <input

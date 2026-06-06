@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 
+// -------------- types -------------- //
 type Bill = {
   id: string;
   name: string;
@@ -17,17 +18,22 @@ type Props = {
   onClose: () => void;
   onSuccess: () => void;
 };
+// ------------------------------------------ //
 
+// -------------- component -------------- //
 export default function EditBillForm({ bill, onClose, onSuccess }: Props) {
   const supabase = createClient();
 
+  // -------------- states -------------- //
   const [name, setName] = useState(bill.name);
   const [amount, setAmount] = useState(bill.amount.toString());
   const [dueDate, setDueDate] = useState(bill.due_date);
   const [frequency, setFrequency] = useState(bill.frequency);
 
   const [error, setError] = useState("");
+  // ------------------------------------------ //
 
+  // -------------- data functions -------------- //
   async function handleSubmit() {
     // clear previous error
     setError("");
@@ -72,7 +78,9 @@ export default function EditBillForm({ bill, onClose, onSuccess }: Props) {
 
     onSuccess();
   }
+  // ------------------------------------------ //
 
+  // -------------- component render output -------------- //
   return (
     <div className="text-black fixed inset-0 bg-black/40 flex items-center justify-center z-50">
       <div className="bg-white rounded-xl p-6 w-full max-w-md space-y-4">
@@ -128,4 +136,5 @@ export default function EditBillForm({ bill, onClose, onSuccess }: Props) {
       </div>
     </div>
   );
+  // ------------------------------------------ //
 }

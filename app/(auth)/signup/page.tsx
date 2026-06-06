@@ -62,7 +62,7 @@ export default function SignupPage() {
           Create Account
         </h1>
 
-        {/* Email */}
+        {/* email */}
         <div className="space-y-1">
           <label className="text-sm font-medium text-gray-600">
             Email
@@ -79,7 +79,7 @@ export default function SignupPage() {
           />
         </div>
 
-        {/* Password */}
+        {/* password */}
         <div className="space-y-1">
           <label className="text-sm font-medium text-gray-600">
             Password
@@ -96,7 +96,7 @@ export default function SignupPage() {
           />
         </div>
 
-        {/* Confirm Password */}
+        {/* confirm password */}
         <div className="space-y-1">
           <label className="text-sm font-medium text-gray-600">
             Confirm Password
@@ -113,14 +113,14 @@ export default function SignupPage() {
           />
         </div>
 
-        {/* Error */}
+        {/* error */}
         {error && (
           <p className="text-sm text-red-500 bg-red-50 p-2 rounded">
             {error}
           </p>
         )}
 
-        {/* Submit */}
+        {/* submit */}
         <button
           type="submit"
           disabled={loading}
@@ -129,7 +129,7 @@ export default function SignupPage() {
           {loading ? "Creating account..." : "Sign Up"}
         </button>
 
-        {/* Link */}
+        {/* link */}
         <div className="text-sm text-center text-gray-600 pt-2">
           <a href="/login" className="hover:underline">
             Already have an account? Sign In
