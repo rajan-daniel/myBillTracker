@@ -35,6 +35,16 @@ function isNextMonth(dueDate: string) {
   );
 }
 
+function truncateName(name: string) {
+  return name.length > 8 ? name.slice(0, 8) + "..." : name;
+}
+
+function truncateAmount(amount: number) {
+  const formatted = amount.toFixed(2);
+
+  return amount >= 10000000 ? formatted.slice(0, 8) + "..." : formatted;
+}
+
 type Bill = {
   id: string;
   user_id: string;
@@ -66,7 +76,13 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
 
   const filteredBills = showPaid
-    ? bills.filter((bill) => bill.status === "paid")
+    ? bills
+        .filter((bill) => bill.status === "paid")
+        .sort(
+          (a, b) =>
+            new Date(b.due_date).getTime() - new Date(a.due_date).getTime(),
+        )
+        .slice(0, 15)
     : bills.filter((bill) => bill.status !== "paid");
 
   async function fetchBills() {
@@ -194,13 +210,12 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       )}
 
       <div className="space-y-4 pb-6">
-        {/* TOGGLES */}
         <div className="flex justify-center gap-3">
           <button
             onClick={() => setShowPaid(!showPaid)}
             className="w-[170px] px-4 py-2 text-sm rounded-lg bg-black text-white hover:bg-gray-800 transition shadow-sm"
           >
-            {showPaid ? "Hide Paid Bills" : "Show Paid Bills"}
+            {showPaid ? "Upcoming Bills" : "Recently Paid"}
           </button>
 
           <button
@@ -218,83 +233,128 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
           </button>
         </div>
 
-        {/* SUMMARY */}
-        <div className="flex justify-center">
-          <div className="bg-white border rounded-xl px-4 py-3 shadow-sm text-center">
-            <p className="text-sm text-gray-500">This Month Unpaid Total</p>
-            <p className="text-xl font-semibold text-gray-900">
-              ${thisMonthUnpaidTotal.toFixed(2)}
-            </p>
+        {!showPaid && (
+          <div className="flex justify-center">
+            <div className="bg-white border rounded-xl px-4 py-3 shadow-sm text-center">
+              <p className="text-sm text-gray-500">This Month Unpaid Total</p>
+              <p className="text-xl font-semibold text-gray-900">
+                ${thisMonthUnpaidTotal.toFixed(2)}
+              </p>
+            </div>
           </div>
-        </div>
+        )}
 
         {filteredBills.length === 0 ? (
           <p className="text-gray-500 text-sm text-center">No bills found</p>
         ) : (
           <div className="space-y-3">
-            {filteredBills.map((bill) => (
-              <div
-                key={bill.id}
-                className={`border rounded-xl p-4 flex flex-col gap-1 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg w-full max-w-2xl mx-auto
-                  ${getBorderClass(bill)}
-                  ${
-                    focusMode && isNextMonth(bill.due_date)
-                      ? "bg-gray-50 opacity-60 grayscale"
-                      : "bg-white"
-                  }
-                `}
-              >
-                <div className="flex justify-between items-center">
-                  <p className="text-2xl font-semibold text-gray-900 tracking-tight">
-                    {bill.name}
-                  </p>
+            {filteredBills.map((bill) =>
+              showPaid ? (
+                <div
+                  key={bill.id}
+                  className="border rounded-lg px-4 py-2 bg-white w-full max-w-2xl mx-auto"
+                >
+                  <div className="flex justify-between items-center">
+                    <p className="font-medium text-gray-900">
+                      {truncateName(bill.name)}
+                    </p>
 
-                  {isOverdue(bill) && (
-                    <p className="text-xs text-red-500 font-medium">Overdue</p>
-                  )}
+                    <div className="flex items-center gap-4">
+                      <p className="text-gray-700">
+                        <span>
+                          <span className="sm:hidden">
+                            ${truncateAmount(bill.amount)}
+                          </span>
+                          <span className="hidden sm:inline">
+                            ${bill.amount.toFixed(2)}
+                          </span>
+                        </span>
+                      </p>
 
-                  <div className="flex gap-3">
-                    <button
-                      onClick={() => toggleStatus(bill)}
-                      disabled={loadingIds.has(bill.id)}
-                      className="text-sm px-3 py-1 rounded-md text-white
-                      bg-gradient-to-r from-sky-400 to-indigo-500
-                      hover:from-sky-300 hover:to-purple-500
-                      transition-all duration-300
-                      shadow-md hover:shadow-[0_0_15px_rgba(99,102,241,0.6)]
-                      hover:scale-105
-                      disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                      {bill.status === "paid" ? "Paid" : "Mark as Paid"}
-                    </button>
+                      <p className="text-sm text-gray-500">
+                        {formatDate(bill.due_date)}
+                      </p>
 
-                    <button
-                      onClick={() => setEditingBill(bill)}
-                      className="text-[var(--text-color)] text-sm hover:underline"
-                    >
-                      Edit
-                    </button>
-
-                    <button
-                      onClick={() => deleteBill(bill.id)}
-                      className="text-red-500 text-sm hover:underline"
-                    >
-                      Delete
-                    </button>
+                      <button
+                        onClick={() => toggleStatus(bill)}
+                        disabled={loadingIds.has(bill.id)}
+                        className="text-xs px-2 py-1 rounded-md text-white
+  bg-gradient-to-r from-sky-400 to-indigo-500
+  hover:from-sky-300 hover:to-purple-500
+  transition-all duration-300
+  disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        Undo
+                      </button>
+                    </div>
                   </div>
                 </div>
+              ) : (
+                <div
+                  key={bill.id}
+                  className={`border rounded-xl p-4 flex flex-col gap-1 transition-all duration-200 ease-out hover:scale-[1.02] hover:shadow-lg w-full max-w-2xl mx-auto
+        ${getBorderClass(bill)}
+        ${
+          focusMode && isNextMonth(bill.due_date)
+            ? "bg-gray-50 opacity-60 grayscale"
+            : "bg-white"
+        }
+      `}
+                >
+                  <div className="flex justify-between items-center">
+                    <p className="text-2xl font-semibold text-gray-900 tracking-tight">
+                      {truncateName(bill.name)}
+                    </p>
 
-                <p className="text-gray-700">${bill.amount.toFixed(2)}</p>
+                    {isOverdue(bill) && (
+                      <p className="text-xs text-red-500 font-medium">
+                        Overdue
+                      </p>
+                    )}
 
-                <p className="text-sm text-gray-500">
-                  Due: {formatDate(bill.due_date)}
-                </p>
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => toggleStatus(bill)}
+                        disabled={loadingIds.has(bill.id)}
+                        className="text-sm px-3 py-1 rounded-md text-white
+            bg-gradient-to-r from-sky-400 to-indigo-500
+            hover:from-sky-300 hover:to-purple-500
+            transition-all duration-300
+            shadow-md hover:shadow-[0_0_15px_rgba(99,102,241,0.6)]
+            hover:scale-105
+            disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {bill.status === "paid" ? "Paid" : "Mark as Paid"}
+                      </button>
 
-                <p className="text-xs text-gray-400 uppercase tracking-wide">
-                  {bill.frequency}
-                </p>
-              </div>
-            ))}
+                      <button
+                        onClick={() => setEditingBill(bill)}
+                        className="text-[var(--text-color)] text-sm hover:underline"
+                      >
+                        Edit
+                      </button>
+
+                      <button
+                        onClick={() => deleteBill(bill.id)}
+                        className="text-red-500 text-sm hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+
+                  <p className="text-gray-700">${bill.amount.toFixed(2)}</p>
+
+                  <p className="text-sm text-gray-500">
+                    Due: {formatDate(bill.due_date)}
+                  </p>
+
+                  <p className="text-xs text-gray-400 uppercase tracking-wide">
+                    {bill.frequency}
+                  </p>
+                </div>
+              ),
+            )}
           </div>
         )}
       </div>
