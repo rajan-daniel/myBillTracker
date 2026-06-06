@@ -88,4 +88,27 @@ Legal Pages including Privacy Policy & Terms of Service
 App router for reset and update password via supabase client
 Refactors and basic de bloating
 First complete version of myBillTracker
+
+-----------------------------------6/4/2026-----------------------------------------------
+Polish and add edge features, edit, mark as paid, overdue and ascending sort logic
+Complete styling and test for edge cases,
+App becomes usuable and functional, start to stage CI/CD roadmaps for near future before
+deployment.
+Auto recurring billing on payment
+Style: Added two column dashboard while maintaining mobile scaling
+Added border for clarity
+Resolved edge cases, overflow element causing right side bands on mount, styling decisions, 
+additional application features not core like focus mode and styling to present them cleanly.
+Resolved found bugs through testing like mark as paid spam causing duplicate cards.
+
+-----------------------------------6/6/2026-----------------------------------------------|
+version 1.0 of the application: edge cases and desired features.
+styling, pagination, and mobile scaling features.
+resolved edge cases of headers being too long by implementing truncation.
+overall styling overhaul of the dashboard
+resolved found bugs during testing
+documentation updates including legal pages and README.md
+website deployed.
 ```
+
+

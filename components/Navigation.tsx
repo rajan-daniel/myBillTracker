@@ -13,7 +13,8 @@ export default function Navigation() {
   const supabase = createClient();
   const pathname = usePathname();
 
-  // Close mobile menu on route change
+  const closeMenu = () => setOpen(false);
+
   useEffect(() => {
     setOpen(false);
   }, [pathname]);
@@ -79,10 +80,14 @@ export default function Navigation() {
         {/* desktop nav */}
         <div className="absolute right-8 hidden md:flex items-center gap-8">
           {!user ? (
-            <Link href="/login" className="hover:underline cursor-pointer">Sign In</Link>
+            <Link href="/login" className="hover:underline cursor-pointer">
+              Sign In
+            </Link>
           ) : (
             <>
-              <Link href="/dashboard" className="hover:underline cursor-pointer">Dashboard</Link>
+              <Link href="/dashboard" className="hover:underline cursor-pointer">
+                Dashboard
+              </Link>
               <LogoutButton />
             </>
           )}
@@ -105,11 +110,17 @@ export default function Navigation() {
       {open && (
         <div className="md:hidden fixed top-22 left-0 w-full bg-[var(--accent-silver)] text-[var(--text-color)] flex flex-col items-center gap-6 py-6 font-bold text-lg z-50 shadow-lg">
           {!user ? (
-            <Link href="/login">Sign In</Link>
+            <Link href="/login" onClick={closeMenu}>
+              Sign In
+            </Link>
           ) : (
             <>
-              <Link href="/dashboard">Dashboard</Link>
-              <LogoutButton />
+              <Link href="/dashboard" onClick={closeMenu}>
+                Dashboard
+              </Link>
+              <div onClick={closeMenu}>
+                <LogoutButton />
+              </div>
             </>
           )}
         </div>

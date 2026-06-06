@@ -7,6 +7,7 @@
   --text-color: #1A1A1A;
   --accent-text: #E73545;
   --footer-accent: #BBBBBB;
+  --accent-logo: #38f801;
 }
 
 @theme inline {
@@ -16,16 +17,12 @@
   --font-mono: var(--font-geist-mono);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  scrollbar-gutter: stable;
-}
-
 body html {
   overflow-x: hidden;
 }
 
-html {
-  overflow-y: scroll;
+body {
+  background: var(--background);
+  color: var(--foreground);
+  scrollbar-gutter: stable;
 }

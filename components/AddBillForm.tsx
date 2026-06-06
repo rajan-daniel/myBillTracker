@@ -3,9 +3,11 @@
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 
+// -------------- component -------------- //
 export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
   const supabase = createClient();
 
+  // -------------- state -------------- //
   const [step, setStep] = useState(0);
 
   const [name, setName] = useState("");
@@ -15,9 +17,13 @@ export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  // ------------------------------------------ //
 
+  // -------------- constants -------------- //
   const steps = ["Name", "Amount", "Due Date", "Frequency"];
+  // ------------------------------------------ //
 
+  // -------------- validation helpers -------------- //
   function validateStep() {
     if (step === 0 && !name.trim()) {
       setError("Please enter a bill name");
@@ -37,7 +43,9 @@ export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
     setError("");
     return true;
   }
+  // ------------------------------------------ //
 
+  // -------------- navigation handlers -------------- //
   function nextStep() {
     if (!validateStep()) return;
     setStep((s) => s + 1);
@@ -59,7 +67,9 @@ export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
       handleSubmit();
     }
   }
+  // ------------------------------------------ //
 
+  // -------------- data functions -------------- //
   async function handleSubmit() {
     if (!name.trim()) return setError("Name is required");
     if (!amount) return setError("Amount is required");
@@ -83,6 +93,7 @@ export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
       amount: Number(amount),
       due_date: dueDate,
       frequency,
+      status: "unpaid",
     });
 
     if (error) {
@@ -102,7 +113,9 @@ export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
     }, 3000);
     onSuccess?.();
   }
+  // ------------------------------------------ //
 
+  // -------------- component render output -------------- //
   return (
     <main className="bg-gray-50 px-4 py-10">
       <div className="w-full max-w-[448px] bg-white rounded-2xl shadow-lg p-8 space-y-6 mx-auto">
@@ -229,3 +242,4 @@ export default function AddBillForm({ onSuccess }: { onSuccess?: () => void }) {
     </main>
   );
 }
+// ------------------------------------------ //

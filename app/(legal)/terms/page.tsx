@@ -5,7 +5,7 @@ export default function TermsPage() {
 
       <div className="space-y-6 text-gray-700">
         <p>
-          Last Updated: May 2026
+          Last Updated: June 2026
         </p>
 
         <section>
