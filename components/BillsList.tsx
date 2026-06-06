@@ -36,10 +36,6 @@ function isNextMonth(dueDate: string) {
   );
 }
 
-function truncateName(name: string) {
-  return name.length > 9 ? name.slice(0, 9) + "..." : name;
-}
-
 function truncateAmount(amount: number) {
   const formatted = amount.toFixed(2);
 
@@ -61,7 +57,7 @@ type Bill = {
 export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const supabase = createClient();
 
-// -------------- states -------------- //
+  // -------------- states -------------- //
   const [bills, setBills] = useState<Bill[]>([]);
   const [editingBill, setEditingBill] = useState<Bill | null>(null);
   const [showPaid, setShowPaid] = useState(false);
@@ -70,9 +66,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
   const [page, setPage] = useState(1);
   const pageSize = 10;
-// ------------------------------------------ //
+  // ------------------------------------------ //
 
-// ============= computed values ============= //
+  // ============= computed values ============= //
   const unpaidBills = bills.filter((bill) => bill.status !== "paid");
 
   const filteredBills = showPaid
@@ -98,9 +94,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       );
     })
     .reduce((sum, bill) => sum + bill.amount, 0);
-// ======================================= //
+  // ======================================= //
 
-// ================= useEffect hooks ======================
+  // ================= useEffect hooks ======================
   useEffect(() => {
     const saved = localStorage.getItem("focusMode");
     if (saved !== null) {
@@ -121,9 +117,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   useEffect(() => {
     setPage(1);
   }, [showPaid]);
-// ======================================= //
+  // ======================================= //
 
-// ===================== data layer from Supabase ======================///
+  // ===================== data layer from Supabase ======================///
   async function fetchBills() {
     const { data, error } = await supabase
       .from("bills")
@@ -175,8 +171,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
 
       if (
         bill.status === "unpaid" &&
-        newStatus === "paid" &&
-        bill.frequency !== "one-time"
+        newStatus === "paid"
       ) {
         playSound();
 
@@ -201,9 +196,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       });
     }
   }
-// ===========================================///
+  // ===========================================///
 
-// ======================== more helper functions ===================///
+  // ======================== more helper functions ===================///
   function isOverdue(bill: Bill) {
     return bill.status !== "paid" && new Date(bill.due_date) < new Date();
   }
@@ -218,9 +213,9 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
     const [year, month, day] = date.split("-");
     return `${month}/${day}/${year}`;
   }
-// =========================================== //
- 
-// ========================= component’s render output ===================== //
+  // =========================================== //
+
+  // ========================= component’s render output ===================== //
   return (
     <>
       {editingBill && (
@@ -280,8 +275,8 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
                   className="border rounded-lg px-4 py-2 bg-white w-full max-w-2xl mx-auto"
                 >
                   <div className="flex justify-between items-center">
-                    <p className="font-medium text-gray-900">
-                      {truncateName(bill.name)}
+                    <p className="font-medium text-gray-900 min-w-[80px] truncate max-w-[120px]">
+                      {bill.name}
                     </p>
 
                     <div className="flex items-center gap-4">
@@ -327,8 +322,8 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
       `}
                 >
                   <div className="flex justify-between items-center">
-                    <p className="text-2xl font-semibold text-gray-900 tracking-tight">
-                      {truncateName(bill.name)}
+                    <p className="text-2xl font-semibold text-gray-900 tracking-tight min-w-[80px] truncate max-w-[260px] min-w-0">
+                      {bill.name}
                     </p>
 
                     <div className="flex gap-3">
