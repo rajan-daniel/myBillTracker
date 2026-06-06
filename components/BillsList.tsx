@@ -52,7 +52,16 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
   const [editingBill, setEditingBill] = useState<Bill | null>(null);
   const [showPaid, setShowPaid] = useState(false);
 
-  const [focusMode, setFocusMode] = useState(false);
+  const [focusMode, setFocusMode] = useState(() => {
+    if (typeof window === "undefined") return true;
+
+    const saved = localStorage.getItem("focusMode");
+    return saved ? JSON.parse(saved) : true;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("focusMode", JSON.stringify(focusMode));
+  }, [focusMode]);
 
   const [loadingIds, setLoadingIds] = useState<Set<string>>(new Set());
 
@@ -164,8 +173,8 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
 
       return (
         bill.status !== "paid" &&
-        (date.getFullYear() === now.getFullYear() &&
-          date.getMonth() === now.getMonth() ||
+        ((date.getFullYear() === now.getFullYear() &&
+          date.getMonth() === now.getMonth()) ||
           date < now)
       );
     })
@@ -241,9 +250,7 @@ export default function BillsList({ refreshKey }: { refreshKey: number }) {
                   </p>
 
                   {isOverdue(bill) && (
-                    <p className="text-xs text-red-500 font-medium">
-                      Overdue
-                    </p>
+                    <p className="text-xs text-red-500 font-medium">Overdue</p>
                   )}
 
                   <div className="flex gap-3">
