@@ -245,7 +245,11 @@ myBillTracker can be used for:
 
 ---
 
-## 🌐 Live Demo
+## 🌐 Live Preview
+
+https://github.com/user-attachments/assets/35a4a997-7c23-4738-8def-c4a38a851119
+
+https://github.com/user-attachments/assets/1946031e-e66e-45ed-bdc4-6d191d2ad7ff
 
 View the live project here:
 
